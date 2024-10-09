@@ -1,5 +1,7 @@
 #include <bits/stdc++.h>
 #include "encode.h"
+#include "serializer/serialize.h"
+#include <map>
 using namespace std;
 
 Node::Node():c(""), occurence(0), left(nullptr), right(nullptr){}
@@ -66,9 +68,13 @@ namespace huffmanEncoding{
         return mp;
     }
 
-    string encode(string s){
+    string encode(std::string s,std::string filename){
         map<string,string>table = getHuffmanTable(s);
+        map<string, string>out_table = serialize(table, filename + ".bin"); 
         string ret = "";
+        for(auto it: out_table){
+            cout<<it.first<<" "<<it.second<<endl;
+        }
         for(auto it: s){
             string it1 = "";
             it1 += it;
@@ -76,12 +82,14 @@ namespace huffmanEncoding{
         }
         return ret;
     }
+
     bool encodeFile(string fileName){
         ifstream inp(fileName);
         if(!inp.is_open()){
             std::cerr<<"Error opening file!"<<std::endl;
             return 1;
         }
+
         string line;
         string file_content = "";
         while(getline(inp, line)){
@@ -100,7 +108,7 @@ namespace huffmanEncoding{
             it1 += it;
             encoded_output += table[it1];
         }
-        std::cout<<encoded_output<<std::endl;
+        // std::cout<<encoded_output<<std::endl;
 
         ofstream file(fileName + ".hf");
         if(!file.is_open()){
@@ -108,15 +116,23 @@ namespace huffmanEncoding{
             return 1;
         }
 
+        std::cout<<file_content.length() * 8<<std::endl;
+        std::cout<<encoded_output.length()<<std::endl;
+        std::cout<<100 - (encoded_output.length() * 100 / (file_content.length() * 8))<<"% compression"<<std::endl;
         file<<encoded_output<<std::endl;
+
+        map<string, string>out_table = serialize(table, fileName + ".bin"); 
+        for(auto it: out_table){
+            cout<<it.first<<" "<<it.second<<endl;
+        }
+        
         file.close();
         return 0;
     }
-
 }
 
 int main()
 {
-    cout<<huffmanEncoding::encodeFile("./encode.h")<<endl;
+    huffmanEncoding::encodeFile("./encode.h");
 
 }
