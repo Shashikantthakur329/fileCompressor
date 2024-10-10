@@ -2,7 +2,7 @@
 #include <fstream>
 #include <map>
 #include <string>
-#include "serialize.h"
+// #include "serialize.h"
 using namespace std;
 
 // Function to serialize a string
@@ -87,19 +87,12 @@ void deserialize_map(std::map<K, V>& map_data, const std::string& file_name) {
 
 
 template<typename K, typename V>
-std::map<K,V> serialize(map<K,V>&mp, std::string filename) {
-    // Example map to serialize
-    std::map<std::string, int> my_map = {
-        {"one", 1},
-        {"two", 2},
-        {"three", 3}
-    };
-
+void serialize(map<K,V>&mp, std::string &filename) {
     // Serialize the map to a binary file
     serialize_map(mp, filename);
 
     // Deserialize the map back from the file
-    std::map<std::string, int> out_map;
+    std::map<std::string, std::string> out_map;
     deserialize_map(out_map, filename);
 
     // Print deserialized map
@@ -107,23 +100,25 @@ std::map<K,V> serialize(map<K,V>&mp, std::string filename) {
     //     std::cout << "Key: " << pair.first << ", Value: " << pair.second << '\n';
     // }
 
-    return out_map;
+    // return out_map;
 }
 
-/*
-int main()
-{
-    std::map<std::string, std::string> my_map = {
-        {"one", "1"},
-        {"two", "2"},
-        {"three", "3"}
-    };
-    serialize_map(my_map, "temp.bin");
-    std::map<std::string,std::string>out_map;
-    deserialize_map(out_map, "temp.bin");
-    for(auto it: out_map){
-        std::cout<<it.first<<" "<<it.second<<std::endl;
-    }
-    cout<<std::endl;
-}
-*/
+
+// int main()
+// {
+//     std::map<std::string, std::string> my_map = {
+//         {"one", "1"},
+//         {"two", "2"},
+//         {"three", "3"}
+//     };
+//     serialize_map(my_map, "temp.bin");
+//     std::map<std::string,std::string>out_map;
+//     deserialize_map(out_map, "temp.bin");
+//     for(auto it: out_map){
+//         std::cout<<it.first<<" "<<it.second<<std::endl;
+//     }
+//     cout<<std::endl;
+// }
+
+
+

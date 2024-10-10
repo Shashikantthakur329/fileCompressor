@@ -14,7 +14,6 @@ namespace huffmanEncoding{
         if((root->c).length() == 1){
             mp[root->c] = s;
         }
-        // cout<<root->c<<" "<<root->occurence<<endl;
         trav(root->left, s+"0", mp);
         trav(root->right,s+"1", mp);
         
@@ -62,19 +61,12 @@ namespace huffmanEncoding{
         Node* root = pq.top().second;
         map<string,string>mp;
         trav(root,"",mp);
-        // for(auto &it: mp){
-        //     cout<<it.first<<" "<<it.second<<endl;
-        // }
         return mp;
     }
 
     string encode(std::string s,std::string filename){
         map<string,string>table = getHuffmanTable(s);
-        map<string, string>out_table = serialize(table, filename + ".bin"); 
         string ret = "";
-        for(auto it: out_table){
-            cout<<it.first<<" "<<it.second<<endl;
-        }
         for(auto it: s){
             string it1 = "";
             it1 += it;
@@ -93,11 +85,9 @@ namespace huffmanEncoding{
         string line;
         string file_content = "";
         while(getline(inp, line)){
-            // std::cout<<line;
             file_content += line;
             file_content += "\n";
         }
-        // std::cout<<file_content<<std::endl;
         inp.close();
 
         string encoded_output = "";
@@ -108,24 +98,22 @@ namespace huffmanEncoding{
             it1 += it;
             encoded_output += table[it1];
         }
-        // std::cout<<encoded_output<<std::endl;
 
-        ofstream file(fileName + ".hf");
+        string out_file = fileName + ".bin";
+        serialize(table, out_file);
+        
+        ofstream file(fileName + ".bin", std::ios::app);
         if(!file.is_open()){
             std::cerr<<"Error in creating file!" << std::endl;
             return 1;
         }
 
-        std::cout<<file_content.length() * 8<<std::endl;
-        std::cout<<encoded_output.length()<<std::endl;
+        std::cout<<"original file length: " << file_content.length() * 8<<std::endl;
+        std::cout<<"encoded file length: "<<encoded_output.length()<<std::endl;
         std::cout<<100 - (encoded_output.length() * 100 / (file_content.length() * 8))<<"% compression"<<std::endl;
+        size_t len = encoded_output.length();
+        file.write(reinterpret_cast<char*>(&len), sizeof(len));
         file<<encoded_output<<std::endl;
-
-        map<string, string>out_table = serialize(table, fileName + ".bin"); 
-        for(auto it: out_table){
-            cout<<it.first<<" "<<it.second<<endl;
-        }
-        
         file.close();
         return 0;
     }
@@ -133,6 +121,7 @@ namespace huffmanEncoding{
 
 int main()
 {
-    huffmanEncoding::encodeFile("./encode.h");
-
+    huffmanEncoding::encodeFile("/home/toor/cpp/huffman_encoding/src/test.txt");
 }
+
+

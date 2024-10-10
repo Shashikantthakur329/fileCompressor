@@ -1,9 +1,3 @@
-#ifndef SERIALIZE_H
-#define SERIALIZE_H
-
-//template<typename K, typename V>
-//std::map<K,V> serialize(std::map<K,V>&mp, std::string filename);
-
 #include <iostream>
 #include <fstream>
 #include <map>
@@ -32,7 +26,7 @@ template<typename K, typename V>
 void serialize_map(const std::map<K, V>& map_data, const std::string& file_name) {
     std::ofstream out(file_name, std::ios::binary);
     
-    if (!out) {
+    if (!out.is_open()) {
         throw std::runtime_error("Unable to open file for writing");
     }
     
@@ -40,6 +34,7 @@ void serialize_map(const std::map<K, V>& map_data, const std::string& file_name)
     out.write(reinterpret_cast<const char*>(&map_size), sizeof(map_size));  // Write map size
     
     for (const auto& pair : map_data) {
+        // std::cout<<pair.first<<" "<<pair.second<<std::endl;
         if constexpr (std::is_same<K, std::string>::value) {
             serialize_string(pair.first, out);  // Serialize key (string)
         } else {
@@ -52,7 +47,7 @@ void serialize_map(const std::map<K, V>& map_data, const std::string& file_name)
             out.write(reinterpret_cast<const char*>(&pair.second), sizeof(pair.second));  // Serialize value (non-string)
         }
     }
-
+    // std::cout<<file_name<<std::endl;
     out.close();
 }
 
@@ -61,7 +56,7 @@ template<typename K, typename V>
 void deserialize_map(std::map<K, V>& map_data, const std::string& file_name) {
     std::ifstream in(file_name, std::ios::binary);
     
-    if (!in) {
+    if (!in.is_open()) {
         throw std::runtime_error("Unable to open file for reading");
     }
     
@@ -93,17 +88,7 @@ void deserialize_map(std::map<K, V>& map_data, const std::string& file_name) {
 
 
 template<typename K, typename V>
-std::map<K,V> serialize(map<K,V>&mp, std::string filename) {
-    // Example map to serialize
-
-    // Serialize the map to a binary file
+void serialize(map<K,V>&mp, std::string &filename) {
     serialize_map(mp, filename);
- 
-    std::map<std::string, std::string> out_map;
-    deserialize_map(out_map, filename);
-
-    return out_map;
 }
 
-
-#endif
