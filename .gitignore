@@ -1,0 +1,6 @@
+# Ignore specific files
+/src/a.out
+/src/todo
+/test.txt
+/.vscode/
+/a.out
