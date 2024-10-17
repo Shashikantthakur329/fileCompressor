@@ -3,8 +3,11 @@
 
 #include <bits/stdc++.h>
 // Function to deserialize a map from a binary file
-template<typename K, typename V>
-std::string deserialize_map(const std::string& file_name);
+namespace huffmanEncoding{
+    // template<typename K, typename V>
+    void deserialize_map(const std::string& file_name);
 
+    void decodeFile(std::string &file_name);
+}
 // #include "./decode.cpp"
 #endif

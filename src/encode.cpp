@@ -108,20 +108,22 @@ namespace huffmanEncoding{
             return 1;
         }
 
-        std::cout<<"original file length: " << file_content.length() * 8<<std::endl;
-        std::cout<<"encoded file length: "<<encoded_output.length()<<std::endl;
+        std::cout<<"original file length: " << file_content.length() * 8 << std::endl;
+        std::cout<<"encoded file length: " << encoded_output.length() << std::endl;
         std::cout<<100 - (encoded_output.length() * 100 / (file_content.length() * 8))<<"% compression"<<std::endl;
         size_t len = encoded_output.length();
+
         file.write(reinterpret_cast<char*>(&len), sizeof(len));
         file<<encoded_output<<std::endl;
+        std::cout<<encoded_output<<std::endl;
         file.close();
         return 0;
     }
 }
 
-int main()
-{
-    huffmanEncoding::encodeFile("/home/toor/cpp/huffman_encoding/src/test.txt");
-}
+// int main()
+// {
+//     huffmanEncoding::encodeFile("/home/toor/cpp/huffman_encoding/src/test.txt");
+// }
 
 
